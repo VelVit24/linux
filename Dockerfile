@@ -5,6 +5,7 @@ WORKDIR /app
 COPY pyproject.toml Makefile ./
 
 RUN apt-get update && apt-get install -y make gcc
+
 RUN make install
 
 COPY . .
