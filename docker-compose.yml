@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    container_name: app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    command: uvicorn src.main:app --host 0.0.0.0 --port 5432
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:14
+    container_name: db
+    environment:
+      POSTGRES_USER: kubsu
+      POSTGRES_PASSWORD: kubsu
+      POSTGRES_DB: kubsu
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
