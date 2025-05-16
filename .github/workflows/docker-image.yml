@@ -15,6 +15,7 @@ jobs:
           run: |
             docker build -t velvit24/my-python-app .
             docker stop velvit24/my-python-app || true && docker rm velvit24/my-python-app || true
+            
         - name: Push project
           run: |
             docker push velvit24/my-python-app
