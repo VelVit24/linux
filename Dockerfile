@@ -18,4 +18,4 @@ COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/pytho
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /app .
 
-CMD ["make", "run", "--host", "0.0.0.0", "--port", "58529"]
+CMD ["make", "run", "--host", "0.0.0.0", "--port", "8000"]
