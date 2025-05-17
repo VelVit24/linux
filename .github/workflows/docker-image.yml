@@ -19,7 +19,7 @@ jobs:
         - name: Push project
           run: |
             docker login -u velvit24 -p ${{ secrets.DOCKER_PASSWORD }} 
-            docker push velvit24/my-python-app
+            docker push velvit24/my-python-app:latest
   deploy:
       needs: build
       runs-on: self-hosted
@@ -35,7 +35,7 @@ jobs:
         - name: Connect ssh
           run: |
             ssh -i key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 58529 << 'EOF'
-              podman run -d --rm -p 60080:8000 velvit24/my-python-app
+              podman run -d --rm -p 60080:8000 velvit24/my-python-app:latest
             EOF
 
 
