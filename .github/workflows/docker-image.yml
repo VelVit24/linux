@@ -18,7 +18,7 @@ jobs:
             
         - name: Push project
           run: |
-            docker login -u velvit24 -p ${{ DOCKER_PASSWORD }} 
+            docker login -u velvit24 -p ${{ secrets.DOCKER_PASSWORD }} 
             docker push velvit24/my-python-app
   deploy:
       needs: build
