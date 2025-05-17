@@ -18,8 +18,10 @@ jobs:
             
         - name: Push project
           run: |
+            docker login -u velvit24 -p ${{ DOCKER_PASSWORD }} 
             docker push velvit24/my-python-app
   deploy:
+      needs: build
       runs-on: self-hosted
       steps:
         - uses: actions/checkout@v4
