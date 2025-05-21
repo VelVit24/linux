@@ -57,7 +57,8 @@ jobs:
           run: |
             ssh -i key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 58529 << 'EOF'
               podman pull velvit24/app:latest
-              podman run -d --rm velvit24/app:latest
+              podman stop app || true && podman rm app || true
+              podman run -d --network=host --name app velvit24/app:latest
             EOF
 
 
