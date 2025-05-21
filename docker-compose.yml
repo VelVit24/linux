@@ -26,8 +26,6 @@ services:
     build: .
     image: velvit24/app:latest
     container_name: app
-    ports:
-      - "58529:8001"
-      
+
 volumes:
   pgdata:
