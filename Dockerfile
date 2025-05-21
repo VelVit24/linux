@@ -33,4 +33,4 @@ COPY --from=builder /app /app
 
 RUN apk add --no-cache make
 
-CMD ["uvicorn", "src.main:app", "--reload", "--host", "0.0.0.0", "--port", "58529"]
+CMD ["uvicorn", "src.main:app", "--reload", "--host", "0.0.0.0", "--port", "8050"]
