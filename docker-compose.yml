@@ -1,16 +1,16 @@
-version: '3.9'
-
 services:
-  web:
-    build: .
-    container_name: app
+  test:
+    build:
+      context: .
+      target: builder-test
+    environment:
+      DATABASE_URL: postgresql+psycopg://kubsu:kubsu@db:5432/kubsu
+    container_name: tests
     ports:
       - "8000:8000"
     depends_on:
       - db
-    command: uvicorn src.main:app --host 0.0.0.0 --port 5432
-    volumes:
-      - .:/app
+    command: make test
 
   db:
     image: postgres:14
@@ -21,6 +21,12 @@ services:
       POSTGRES_DB: kubsu
     volumes:
       - pgdata:/var/lib/postgresql/data
-
+  
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "58529:8000"
+      
 volumes:
   pgdata:

@@ -1,7 +1,7 @@
 .PHONY: install install-dev test run
 
 install:
-	pip install .
+	pip install --no-cache-dir .
 
 install-dev:
 	pip install ".[test]"
