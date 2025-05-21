@@ -7,7 +7,7 @@ services:
       DATABASE_URL: postgresql+psycopg://kubsu:kubsu@db:5432/kubsu
     container_name: tests
     ports:
-      - "8000:8000"
+      - "8001:8001"
     depends_on:
       - db
     command: make test
@@ -27,7 +27,7 @@ services:
     image: velvit24/app:latest
     container_name: app
     ports:
-      - "60080:8000"
+      - "58529:8001"
       
 volumes:
   pgdata:
