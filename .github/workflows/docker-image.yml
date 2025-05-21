@@ -6,20 +6,42 @@ on:
     - '*'
 
 jobs:
+  test:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        
+        - name: Build tests
+          run: |
+            docker compose build test db
+            docker stop linux-test || true && docker rm linux-test || true
+            
+        - name: Run tests
+          run: |
+            docker compose up test
   build:
+      needs: test
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v3
         
         - name: Build project
           run: |
-            docker build -t velvit24/my-python-app .
-            docker stop velvit24/my-python-app || true && docker rm velvit24/my-python-app || true
-            
-        - name: Push project
+            docker compose build app
+            docker stop linux-app || true && docker rm linux-app || true
+        - name: Login in DockerHub
           run: |
-            docker login -u velvit24 -p ${{ secrets.DOCKER_PASSWORD }} 
-            docker push velvit24/my-python-app:latest
+            uses: docker/login-action@v3
+            with:
+              username: velvit24
+              password: ${{ secrets.DOCKERHUB_TOKEN }}
+        - name: Build and push
+          uses: docker/build-push-action@v5
+          with:
+            context: .
+            push: true
+            tags: velvit24/app:latest
+  
   deploy:
       needs: build
       runs-on: self-hosted
@@ -35,7 +57,8 @@ jobs:
         - name: Connect ssh
           run: |
             ssh -i key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 58529 << 'EOF'
-              podman run -d --rm -p 60080:8000 velvit24/my-python-app:latest
+              podman pull velvit24/app:latest
+              podman run -d --rm velvit24/app:latest
             EOF
 
 
