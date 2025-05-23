@@ -2,8 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches:
-    - '*'
+    branches: [ master ]
 
 jobs:
   test:
@@ -19,6 +18,7 @@ jobs:
         - name: Run tests
           run: |
             docker compose up test
+            
   build:
       needs: test
       runs-on: ubuntu-latest
@@ -57,6 +57,7 @@ jobs:
           run: |
             ssh -i key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 58529 << 'EOF'
               podman pull velvit24/app:latest
+              podman image prune -f
               podman stop app || true && podman rm app || true
               podman run -d --network=host --name app velvit24/app:latest
             EOF
