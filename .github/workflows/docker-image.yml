@@ -1,20 +1,18 @@
-name: Docker Image CI
+name: Docker Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   test:
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v3
-        
+        - uses: actions/checkout@v3  
         - name: Build tests
           run: |
-            docker compose build test db
             docker stop linux-test || true && docker rm linux-test || true
-            
+            docker compose build test db
         - name: Run tests
           run: |
             docker compose up test
@@ -28,7 +26,6 @@ jobs:
         - name: Build project
           run: |
             docker compose build app
-            docker stop linux-app || true && docker rm linux-app || true
         - name: Login in DockerHub
           uses: docker/login-action@v3
           with:
@@ -46,14 +43,13 @@ jobs:
       runs-on: self-hosted
       steps:
         - uses: actions/checkout@v4
-
         - name: Install SSH key
           env:
             SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           run: |
             echo "$SSH_PRIVATE_KEY" > key.pem
             chmod 600 key.pem
-        - name: Connect ssh
+        - name: Connect ssh and pull
           run: |
             ssh -i key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 58529 << 'EOF'
               podman pull velvit24/app:latest
